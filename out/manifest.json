@@ -21,6 +21,10 @@
     {
       "matches": ["https://*/*", "http://*/*"],
       "js": ["inject.js"]
+    },
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["background.js"]
     }
   ],
   "host_permissions": ["<all_urls>"],
