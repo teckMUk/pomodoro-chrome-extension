@@ -8,7 +8,7 @@ const blockedSites = async () => {
     for (const domain of websitesToBlock){
         if (window.location.hostname.includes(domain)){
             const overlay = document.createElement('div');
-            overlay.id = "test123"
+            overlay.id = `block-extension-1`
             // Set styles for the overlay to cover the entire page
             overlay.style.position = 'fixed';
             overlay.style.top = 0;
@@ -31,3 +31,7 @@ const blockedSites = async () => {
 }
 
 blockedSites()
+
+const unblockSites = () => {
+    
+}
