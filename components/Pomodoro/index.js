@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Pomodoro.module.css";
+import Settings from "./settings";
 
 export default function PomodoroTimer() {
   const [minutes, setMinutes] = useState(25);
@@ -19,21 +20,25 @@ export default function PomodoroTimer() {
       interval = setInterval(() => {
         if (seconds === 0) {
           if (minutes === 0) {
-            setIsActive(false);
             if (isBreak) {
+              // End of break
               setSessions(sessions + 1);
-              setIsBreak(false);
-              setMinutes(workTime);
-            } else {
               if (sessions === 3) {
+                // Long break after 4 work sessions
                 setMinutes(longBreakTime);
                 setSessions(0);
               } else {
+                // Short break
                 setMinutes(shortBreakTime);
-                setIsBreak(true);
               }
+              setIsBreak(true);
+            } else {
+              // End of work session
+              setMinutes(workTime);
+              setIsBreak(false);
             }
             setSeconds(0);
+            setIsActive(false); // Stop the timer when session ends
           } else {
             setMinutes(minutes - 1);
             setSeconds(59);
@@ -58,13 +63,21 @@ export default function PomodoroTimer() {
     longBreakTime,
   ]);
 
+  useEffect(() => {
+    // Reset the timer when settings change
+    if (!isActive) {
+      setMinutes(isBreak ? shortBreakTime : workTime);
+      setSeconds(0);
+    }
+  }, [workTime, shortBreakTime, longBreakTime, isBreak, isActive]);
+
   const toggleStartStop = () => {
     setIsActive(!isActive);
   };
 
   const resetTimer = () => {
     setIsActive(false);
-    setMinutes(25);
+    setMinutes(workTime);
     setSeconds(0);
     setIsBreak(false);
     setSessions(0);
@@ -80,55 +93,25 @@ export default function PomodoroTimer() {
     }
   };
 
-  const handleWorkTimeChange = (e) => {
-    setWorkTime(Number(e.target.value));
-  };
-
-  const handleShortBreakTimeChange = (e) => {
-    setShortBreakTime(Number(e.target.value));
-  };
-
-  const handleLongBreakTimeChange = (e) => {
-    setLongBreakTime(Number(e.target.value));
-  };
-
-  const saveSettings = () => {
-    resetTimer();
-    setIsSettingsScreen(false);
-  };
-
   return (
     <div className={styles.pomodoro}>
       {isSettingsScreen ? (
-        <div className={styles.settings}>
-          <label className={styles.label}>
-            Work Time:
-            <input
-              type="number"
-              value={workTime}
-              onChange={handleWorkTimeChange}
-            />
-          </label>
-          <label className={styles.label}>
-            Short Break:
-            <input
-              type="number"
-              value={shortBreakTime}
-              onChange={handleShortBreakTimeChange}
-            />
-          </label>
-          <label className={styles.label}>
-            Long Break:
-            <input
-              type="number"
-              value={longBreakTime}
-              onChange={handleLongBreakTimeChange}
-            />
-          </label>
-          <button className={styles.controlButton} onClick={saveSettings}>
-            Save
-          </button>
-        </div>
+        <Settings
+          workTime={workTime}
+          shortBreakTime={shortBreakTime}
+          longBreakTime={longBreakTime}
+          handleWorkTimeChange={(e) => setWorkTime(Number(e.target.value))}
+          handleShortBreakTimeChange={(e) =>
+            setShortBreakTime(Number(e.target.value))
+          }
+          handleLongBreakTimeChange={(e) =>
+            setLongBreakTime(Number(e.target.value))
+          }
+          saveSettings={() => {
+            resetTimer();
+            setIsSettingsScreen(false);
+          }}
+        />
       ) : (
         <div className={styles.timerScreen}>
           <h1>{isBreak ? "Break Time" : "Work Time"}</h1>
