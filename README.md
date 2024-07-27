@@ -1,2 +1,2 @@
-# Pomodoro-chrome-extension
-Simple Pomodoro Timer with site blocker
+# pomodoro-chrome-extension
+Simple pomodoro Timer with site blocker
