@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Pomodoro Chrome Extension
 
-## Getting Started
+A chrome extension to help you manage your time using the Pomodoro Technique.
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Fork the repository
+2. Clone the repository to your local machine
+3. Run `npm install` to install the dependencies
+4. Run `npm dev` to start the development server
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Work in Progress
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [x] Start a 25-minute timer
+- [x] Start a 5-minute timer
+- [x] Start a 15-minute timer
+- [x] Start a custom timer
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Future Features
 
-## Learn More
+- [ ] Add a settings page to customize the timer
+- [ ] Add a pause button
+- [ ] Add a reset button
+- [ ] Add a notification when the timer is up
+- [ ] Add a sound when the timer is up
+- [ ] Add a progress bar to show the time left
+- [ ] Add a break timer
+- [ ] Add a long break timer
+- [ ] Add a history page to show past timers
+- [ ] Add a statistics page to show the number of pomodoros completed
+- [ ] Add website blocking while the timer is running
+- [ ] Add a dark mode
+- [ ] Add a light mode
+- [ ] Add a theme switcher
+- [ ] Add a countdown timer to show the time left
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
