@@ -18,79 +18,75 @@ export default function PomodoroTimer() {
 
     if (isActive) {
       interval = setInterval(() => {
-        if (seconds === 0) {
-          if (minutes === 0) {
-            if (isBreak) {
-              // End of break
-              setSessions(sessions + 1);
-              if (sessions === 3) {
-                // Long break after 4 work sessions
-                setMinutes(longBreakTime);
-                setSessions(0);
-              } else {
-                // Short break
-                setMinutes(shortBreakTime);
-              }
-              setIsBreak(true);
-            } else {
-              // End of work session
-              setMinutes(workTime);
-              setIsBreak(false);
-            }
-            setSeconds(0);
-            setIsActive(false); // Stop the timer when session ends
-          } else {
-            setMinutes(minutes - 1);
-            setSeconds(59);
-          }
-        } else {
-          setSeconds(seconds - 1);
-        }
+        handleTimerTick();
       }, 1000);
-    } else if (!isActive && seconds !== 0) {
+    } else {
       clearInterval(interval);
     }
 
     return () => clearInterval(interval);
-  }, [
-    isActive,
-    seconds,
-    minutes,
-    isBreak,
-    sessions,
-    workTime,
-    shortBreakTime,
-    longBreakTime,
-  ]);
+  }, [isActive, seconds, minutes]);
 
   useEffect(() => {
-    // Reset the timer when settings change
     if (!isActive) {
-      setMinutes(isBreak ? shortBreakTime : workTime);
-      setSeconds(0);
+      resetTimer();
     }
-  }, [workTime, shortBreakTime, longBreakTime, isBreak, isActive]);
+  }, [workTime, shortBreakTime, longBreakTime, isBreak]);
 
-  const toggleStartStop = () => {
-    setIsActive(!isActive);
+  const handleTimerTick = () => {
+    if (seconds === 0) {
+      if (minutes === 0) {
+        handleSessionEnd();
+      } else {
+        setMinutes(minutes - 1);
+        setSeconds(59);
+      }
+    } else {
+      setSeconds(seconds - 1);
+    }
+  };
+
+  const handleSessionEnd = () => {
+    if (isBreak) {
+      setSessions((prevSessions) => {
+        const newSessions = prevSessions + 1;
+        if (newSessions === 4) {
+          setMinutes(longBreakTime);
+          setSessions(0);
+        } else {
+          setMinutes(shortBreakTime);
+        }
+        return newSessions;
+      });
+      setIsBreak(true);
+    } else {
+      setMinutes(workTime);
+      setIsBreak(false);
+    }
+    setSeconds(0);
+    setIsActive(false);
   };
 
   const resetTimer = () => {
-    setIsActive(false);
-    setMinutes(workTime);
+    setMinutes(isBreak ? shortBreakTime : workTime);
     setSeconds(0);
     setIsBreak(false);
     setSessions(0);
   };
 
-  const incrementMinutes = () => {
-    setMinutes(minutes + 1);
+  const toggleStartStop = () => {
+    setIsActive((prevIsActive) => !prevIsActive);
   };
 
+  const handleResetClick = () => {
+    setIsActive(false);
+    resetTimer();
+  };
+
+  const incrementMinutes = () => setMinutes(minutes + 1);
+
   const decrementMinutes = () => {
-    if (minutes > 0) {
-      setMinutes(minutes - 1);
-    }
+    if (minutes > 0) setMinutes(minutes - 1);
   };
 
   return (
@@ -128,7 +124,7 @@ export default function PomodoroTimer() {
             <button className={styles.controlButton} onClick={toggleStartStop}>
               {isActive ? "Pause" : "Start"}
             </button>
-            <button className={styles.controlButton} onClick={resetTimer}>
+            <button className={styles.controlButton} onClick={handleResetClick}>
               Reset
             </button>
           </div>
