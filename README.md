@@ -18,7 +18,7 @@ A chrome extension to help you manage your time using the Pomodoro Technique.
 
 ## Future Features
 
-- [ ] Add a settings page to customize the timer
+- [ ] Add a settings page to customize the timer and add website url to block while pomodoro timer is active
 - [ ] Add a pause button
 - [ ] Add a reset button
 - [ ] Add a notification when the timer is up
