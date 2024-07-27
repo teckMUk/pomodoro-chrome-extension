@@ -22,7 +22,7 @@ export default function Home() {
         {/* {activePage === "index" && <Index navigateToPage={navigateToPage} />} */}
         {/* {activePage === "new" && <New navigateToPage={navigateToPage} />} */}
         <title>Pomodoro App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <main>
