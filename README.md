@@ -24,12 +24,12 @@ To install and run Next.js Chrome Extension Starter locally, follow these steps:
 1. Clone this repository: 
 
    ```bash
-   git clone https://github.com/ibnzUK/next-chrome-starter.git
+   git clone https://github.com/teckMUk/pomodoro-chrome-extension
    ```
 2. Navigate to project directory: 
 
    ```
-   cd next-chrome-starter
+   cd pomodoro-chrome-extension
    ```
 4. Install the dependencies using npm: 
    ```
