@@ -10,12 +10,12 @@ export default function Settings({
   handleLongBreakTimeChange,
   saveSettings,
 }) {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
   const [urlList, setUrlList] = useState([]);
 
   useEffect(() => {
     // Load stored URLs from chrome local storage
-    chrome.storage.local.get('urlList', (result) => {
+    chrome.storage.local.get("urlList", (result) => {
       if (result.urlList) {
         setUrlList(result.urlList);
       }
@@ -26,10 +26,10 @@ export default function Settings({
 
   const handleAddUrl = () => {
     if (url) {
-      const domain = url.split('.')[1]
+      const domain = url.split(".")[1];
       const updatedUrlList = [...urlList, domain];
       setUrlList(updatedUrlList);
-      setUrl('');
+      setUrl("");
       // Save the updated URL list to chrome local storage
       chrome.storage.local.set({ urlList: updatedUrlList });
     }
@@ -44,13 +44,16 @@ export default function Settings({
 
   const handleSaveSettings = () => {
     // Save the settings including URLs to chrome local storage
-    chrome.storage.local.set({
-      workTime,
-      shortBreakTime,
-      longBreakTime
-    }, () => {
-      console.log("Settings saved");
-    });
+    chrome.storage.local.set(
+      {
+        workTime,
+        shortBreakTime,
+        longBreakTime,
+      },
+      () => {
+        console.log("Settings saved");
+      }
+    );
     saveSettings();
   };
 
@@ -78,11 +81,7 @@ export default function Settings({
       </label>
       <label className={styles.label}>
         URL:
-        <input
-          type="url"
-          value={url}
-          onChange={handleUrlChange}
-        />
+        <input type="url" value={url} onChange={handleUrlChange} />
         <button className={styles.controlButton} onClick={handleAddUrl}>
           Add URL
         </button>
@@ -91,9 +90,12 @@ export default function Settings({
         <h3>Stored URLs:</h3>
         <ul>
           {urlList.map((url, index) => (
-            <li key={index}>
+            <li key={index} className={styles.li}>
               {url}
-              <button className={styles.deleteButton} onClick={() => handleDeleteUrl(index)}>
+              <button
+                className={styles.deleteButton}
+                onClick={() => handleDeleteUrl(index)}
+              >
                 Delete
               </button>
             </li>

@@ -68,12 +68,49 @@
   background-color: #007BFF;
   color: white;
   transition: background-color 0.3s ease, transform 0.1s ease;
-  margin: 0 5px;
+  margin: 5px 5px 0px 5px;
 }
 
 .controlButton:hover, .settingsButton:hover {
   background-color: #0056b3;
   transform: translateY(-2px);
+}
+
+.deleteButton {
+  padding: 5px 5px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background-color: #ba0d0d;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  margin: 0 5px;
+}
+.urlList {
+  width: 100%;
+}
+
+.urlList ul {
+  list-style: none;
+  padding: 0;
+}
+
+.urlList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+.deleteButton img {
+  width: 20px;
+  height: 20px;
 }
 
 .settingsButton {
