@@ -174,13 +174,13 @@ export default function PomodoroTimer() {
         <div className={styles.timerScreen}>
           <h1>{isBreak ? "Break Time" : "Work Time"}</h1>
           <div className={styles.timer}>
-            <button className={styles.timerButton} onClick={decrementMinutes}>
+            {/* <button className={styles.timerButton} onClick={decrementMinutes}>
               -
-            </button>
+            </button> */}
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-            <button className={styles.timerButton} onClick={incrementMinutes}>
+            {/* <button className={styles.timerButton} onClick={incrementMinutes}>
               +
-            </button>
+            </button> */}
           </div>
           <div className={styles.controls}>
             <button className={styles.controlButton} onClick={toggleStartStop}>
