@@ -56,6 +56,7 @@ To build and import Pomodoro Extension Starter to chrome browser, follow these s
 
 5. The Pomodoro Extension should now be loaded as an unpacked extension in Google Chrome.
 
+
 ![Preview](extension.png)
 
 # Contributing
