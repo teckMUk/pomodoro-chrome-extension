@@ -12,16 +12,18 @@ export default function PomodoroTimer() {
   const [shortBreakTime, setShortBreakTime] = useState(5);
   const [longBreakTime, setLongBreakTime] = useState(15);
   const [isSettingsScreen, setIsSettingsScreen] = useState(false);
+  const [isBlocked,setIsBlocked] = useState(false)
 
   useEffect(() => {
     chrome.storage.local.get(['timerEnd', 'timerState'], function(result) {
       if (result.timerState) {
-        const { isBreak, sessions, workTime, shortBreakTime, longBreakTime } = result.timerState;
+        const { isBreak, sessions, workTime, shortBreakTime, longBreakTime, isBlocked } = result.timerState;
         setIsBreak(isBreak);
         setSessions(sessions);
         setWorkTime(workTime);
         setShortBreakTime(shortBreakTime);
         setLongBreakTime(longBreakTime);
+        setIsBlocked(isBlocked)
       }
       if (result.timerEnd) {
         const remainingTime = Math.max((result.timerEnd - Date.now()) / 1000, 0);
@@ -29,7 +31,7 @@ export default function PomodoroTimer() {
         setSeconds(Math.floor(remainingTime % 60));
         setIsActive(remainingTime > 0);
       }
-    });
+    });toggleStartStop
   }, []);
 
   useEffect(() => {
@@ -51,9 +53,13 @@ export default function PomodoroTimer() {
       resetTimer();
     }
   }, [workTime, shortBreakTime, longBreakTime, isBreak]);
-
+  useEffect(()=>{
+    saveTimerState()
+  },[isBlocked]);
+  
   const saveTimerState = () => {
-    const timerState = { isBreak, sessions, workTime, shortBreakTime, longBreakTime };
+    const timerState = { isBreak, sessions, workTime, shortBreakTime, longBreakTime, isBlocked };
+    console.log("I am saving timer",timerState)
     chrome.storage.local.set({ timerState });
   };
 
@@ -98,25 +104,29 @@ export default function PomodoroTimer() {
   const startTimer = (duration, isBreak) => {
     const totalSeconds = duration;
     if(!isActive){
-      chrome.runtime.sendMessage({ type: 'startAlarm', duration: totalSeconds, isBreak });
       setIsActive(true);
+      setIsBlocked(true);
+      chrome.runtime.sendMessage({ type: 'startAlarm', duration: totalSeconds, isBreak });
+      
+    }
+    if (isBreak){
+      setIsBlocked(false)
     }
     saveTimerState();
   };
 
   const toggleStartStop = () => {
-    setIsActive((prevIsActive) => {
-      if (!prevIsActive) {
-        const totalSeconds = minutes * 60 + seconds;
-        startTimer(totalSeconds, isBreak);
-      } else {
-        chrome.runtime.sendMessage({ type: 'clearAlarm' });
-        chrome.storage.local.remove('timerEnd');
-        setIsActive(false);
-      }
-      return prevIsActive;
-    });
-    saveTimerState();
+    if (!isActive){
+      const totalSeconds = minutes * 60 + seconds;
+      startTimer(totalSeconds, isBreak);
+    }else {
+      setIsActive(false);
+      setIsBlocked(false);
+      console.log("isblocked",isBlocked)
+      saveTimerState();
+      chrome.runtime.sendMessage({ type: 'clearAlarm' , });
+
+    }
   };
 
   const handleResetClick = () => {
@@ -125,6 +135,7 @@ export default function PomodoroTimer() {
     setSessions(0)
     chrome.runtime.sendMessage({ type: 'clearAlarm' });
     chrome.storage.local.remove('timerEnd');
+    setIsBlocked(false)
     saveTimerState();
   };
 
@@ -153,6 +164,8 @@ export default function PomodoroTimer() {
             setSessions(0);
             chrome.runtime.sendMessage({ type: 'clearAlarm' });
             chrome.storage.local.remove('timerEnd');
+            setIsBlocked(false);
+            setIsActive(false)
             saveTimerState();
             setIsSettingsScreen(false);
           }}
@@ -161,13 +174,13 @@ export default function PomodoroTimer() {
         <div className={styles.timerScreen}>
           <h1>{isBreak ? "Break Time" : "Work Time"}</h1>
           <div className={styles.timer}>
-            <button className={styles.timerButton} onClick={decrementMinutes}>
+            {/* <button className={styles.timerButton} onClick={decrementMinutes}>
               -
-            </button>
+            </button> */}
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-            <button className={styles.timerButton} onClick={incrementMinutes}>
+            {/* <button className={styles.timerButton} onClick={incrementMinutes}>
               +
-            </button>
+            </button> */}
           </div>
           <div className={styles.controls}>
             <button className={styles.controlButton} onClick={toggleStartStop}>

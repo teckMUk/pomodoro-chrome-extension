@@ -1,9 +1,14 @@
-const websitesToBlock = [
-    // "youtube",
-    // "facebook"
-]
+
 
 const blockedSites = async () => {
+    const resultTimer = await chrome.storage.local.get('timerState')
+    const isBlocked = resultTimer?.timerState?.isBlocked || false
+    if (!isBlocked){
+        return
+    }
+    const result = await chrome.storage.local.get('urlList')
+    const websitesToBlock = result.urlList || [];
+    console.log(websitesToBlock)
     console.log("block site called")
     for (const domain of websitesToBlock){
         if (window.location.hostname.includes(domain)){
