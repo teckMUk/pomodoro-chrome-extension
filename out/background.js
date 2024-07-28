@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.alarms.clearAll(); // Clear any existing alarms
     chrome.storage.local.remove('timerEnd');
-    const timerState = { isBreak: false, sessions: 0, workTime: 25, shortBreakTime: 5, longBreakTime: 10 };
+    const timerState = { isBreak: false, sessions: 0, workTime: 25, shortBreakTime: 5, longBreakTime: 10, isBlocked: false };
     chrome.storage.local.set({ timerState });
   });
   
