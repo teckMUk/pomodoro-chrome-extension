@@ -1,6 +1,6 @@
 const websitesToBlock = [
-    "youtube",
-    "facebook"
+    // "youtube",
+    // "facebook"
 ]
 
 const blockedSites = async () => {

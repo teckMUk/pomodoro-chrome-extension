@@ -16,9 +16,12 @@ export default function PomodoroTimer() {
   useEffect(() => {
     chrome.storage.local.get(['timerEnd', 'timerState'], function(result) {
       if (result.timerState) {
-        const { isBreak, sessions } = result.timerState;
+        const { isBreak, sessions, workTime, shortBreakTime, longBreakTime } = result.timerState;
         setIsBreak(isBreak);
         setSessions(sessions);
+        setWorkTime(workTime);
+        setShortBreakTime(shortBreakTime);
+        setLongBreakTime(longBreakTime);
       }
       if (result.timerEnd) {
         const remainingTime = Math.max((result.timerEnd - Date.now()) / 1000, 0);
@@ -50,7 +53,7 @@ export default function PomodoroTimer() {
   }, [workTime, shortBreakTime, longBreakTime, isBreak]);
 
   const saveTimerState = () => {
-    const timerState = { isBreak, sessions };
+    const timerState = { isBreak, sessions, workTime, shortBreakTime, longBreakTime };
     chrome.storage.local.set({ timerState });
   };
 
@@ -70,23 +73,17 @@ export default function PomodoroTimer() {
 
   const handleSessionEnd = () => {
     if (isBreak) {
-      setSessions((prevSessions) => {
-        const newSessions = prevSessions + 1;
-        if (newSessions === 4) {
-          setMinutes(longBreakTime);
-          setSessions(0);
-        } else {
-          setMinutes(shortBreakTime);
-        }
-        return newSessions;
-      });
-      setIsBreak(true);
-    } else {
-      setMinutes(workTime);
+      //setIsActive(false)
       setIsBreak(false);
+      resetTimer();
+      setSessions(sessions+1)
+    } else {
+      const breakDuration = sessions + 1 === 4 ? longBreakTime * 60 : shortBreakTime * 60;
+      setMinutes(Math.floor(breakDuration / 60));
+      setSeconds(breakDuration % 60);
+      setIsBreak(true);
+      startTimer(breakDuration, true);
     }
-    setSeconds(0);
-    setIsActive(false);
     saveTimerState();
   };
 
@@ -94,21 +91,30 @@ export default function PomodoroTimer() {
     setMinutes(isBreak ? shortBreakTime : workTime);
     setSeconds(0);
     setIsBreak(false);
-    setSessions(0);
+    //setSessions(0);
+    saveTimerState();
+  };
+
+  const startTimer = (duration, isBreak) => {
+    const totalSeconds = duration;
+    if(!isActive){
+      chrome.runtime.sendMessage({ type: 'startAlarm', duration: totalSeconds, isBreak });
+      setIsActive(true);
+    }
     saveTimerState();
   };
 
   const toggleStartStop = () => {
     setIsActive((prevIsActive) => {
-      const newIsActive = !prevIsActive;
-      if (newIsActive) {
+      if (!prevIsActive) {
         const totalSeconds = minutes * 60 + seconds;
-        chrome.runtime.sendMessage({ type: 'startAlarm', duration: totalSeconds });
+        startTimer(totalSeconds, isBreak);
       } else {
         chrome.runtime.sendMessage({ type: 'clearAlarm' });
         chrome.storage.local.remove('timerEnd');
+        setIsActive(false);
       }
-      return newIsActive;
+      return prevIsActive;
     });
     saveTimerState();
   };
@@ -116,8 +122,10 @@ export default function PomodoroTimer() {
   const handleResetClick = () => {
     setIsActive(false);
     resetTimer();
+    setSessions(0)
     chrome.runtime.sendMessage({ type: 'clearAlarm' });
     chrome.storage.local.remove('timerEnd');
+    saveTimerState();
   };
 
   const incrementMinutes = () => setMinutes(minutes + 1);
@@ -142,6 +150,10 @@ export default function PomodoroTimer() {
           }
           saveSettings={() => {
             resetTimer();
+            setSessions(0);
+            chrome.runtime.sendMessage({ type: 'clearAlarm' });
+            chrome.storage.local.remove('timerEnd');
+            saveTimerState();
             setIsSettingsScreen(false);
           }}
         />
