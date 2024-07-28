@@ -2,69 +2,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: Arial, sans-serif;
-}
-
-.settings {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
 }
 
 .timerScreen {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
+
+.timerScreen h1 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
 }
 
 .timer {
   display: flex;
   align-items: center;
-  font-size: 2rem;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #007BFF;
+  background-color: white;
+  padding: 15px;
+  border-radius: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-}
-
-.controls {
-  display: flex;
-}
-
-.controlButton {
-  margin: 0 10px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #007BFF;
-  color: white;
-}
-
-.controlButton:hover {
-  background-color: #0056b3;
-}
-
-.settingsButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #007BFF;
-  color: white;
-}
-
-.settingsButton:hover {
-  background-color: #0056b3;
+  width: 80%;
 }
 
 .timerButton {
@@ -72,8 +43,68 @@
   border: none;
   font-size: 2rem;
   cursor: pointer;
+  color: #007BFF;
+  padding: 0 10px;
+  transition: color 0.3s ease;
 }
 
-.timerButton:focus {
-  outline: none;
+.timerButton:hover {
+  color: #0056b3;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.controlButton, .settingsButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  margin: 0 5px;
+}
+
+.controlButton:hover, .settingsButton:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.settingsButton {
+  margin-top: 15px;
+  background-color: #6c757d;
+}
+
+.settingsButton:hover {
+  background-color: #5a6268;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.label input {
+  width: 80%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
 }
