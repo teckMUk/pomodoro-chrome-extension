@@ -14,3 +14,9 @@ a {
 * {
   box-sizing: border-box;
 }
+
+:global(p) {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
