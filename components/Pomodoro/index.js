@@ -14,6 +14,22 @@ export default function PomodoroTimer() {
   const [isSettingsScreen, setIsSettingsScreen] = useState(false);
 
   useEffect(() => {
+    chrome.storage.local.get(['timerEnd', 'timerState'], function(result) {
+      if (result.timerState) {
+        const { isBreak, sessions } = result.timerState;
+        setIsBreak(isBreak);
+        setSessions(sessions);
+      }
+      if (result.timerEnd) {
+        const remainingTime = Math.max((result.timerEnd - Date.now()) / 1000, 0);
+        setMinutes(Math.floor(remainingTime / 60));
+        setSeconds(Math.floor(remainingTime % 60));
+        setIsActive(remainingTime > 0);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     let interval = null;
 
     if (isActive) {
@@ -33,6 +49,11 @@ export default function PomodoroTimer() {
     }
   }, [workTime, shortBreakTime, longBreakTime, isBreak]);
 
+  const saveTimerState = () => {
+    const timerState = { isBreak, sessions };
+    chrome.storage.local.set({ timerState });
+  };
+
   const handleTimerTick = () => {
     if (seconds === 0) {
       if (minutes === 0) {
@@ -44,6 +65,7 @@ export default function PomodoroTimer() {
     } else {
       setSeconds(seconds - 1);
     }
+    saveTimerState();
   };
 
   const handleSessionEnd = () => {
@@ -65,6 +87,7 @@ export default function PomodoroTimer() {
     }
     setSeconds(0);
     setIsActive(false);
+    saveTimerState();
   };
 
   const resetTimer = () => {
@@ -72,15 +95,29 @@ export default function PomodoroTimer() {
     setSeconds(0);
     setIsBreak(false);
     setSessions(0);
+    saveTimerState();
   };
 
   const toggleStartStop = () => {
-    setIsActive((prevIsActive) => !prevIsActive);
+    setIsActive((prevIsActive) => {
+      const newIsActive = !prevIsActive;
+      if (newIsActive) {
+        const totalSeconds = minutes * 60 + seconds;
+        chrome.runtime.sendMessage({ type: 'startAlarm', duration: totalSeconds });
+      } else {
+        chrome.runtime.sendMessage({ type: 'clearAlarm' });
+        chrome.storage.local.remove('timerEnd');
+      }
+      return newIsActive;
+    });
+    saveTimerState();
   };
 
   const handleResetClick = () => {
     setIsActive(false);
     resetTimer();
+    chrome.runtime.sendMessage({ type: 'clearAlarm' });
+    chrome.storage.local.remove('timerEnd');
   };
 
   const incrementMinutes = () => setMinutes(minutes + 1);
