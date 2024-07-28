@@ -10,7 +10,10 @@
     "48": "/icons/icon48.png",
     "192": "/icons/icon192.png"
   },
-  "permissions": [],
+  "permissions": ["storage", "alarms", "notifications"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "web_accessible_resources": [
     {
       "resources": ["index.html"],
@@ -24,7 +27,7 @@
     },
     {
       "matches": ["https://*/*", "http://*/*"],
-      "js": ["background.js"]
+      "js": ["block.js"]
     }
   ],
   "host_permissions": ["<all_urls>"],
