@@ -1,12 +1,10 @@
 {
-  "name": "next-chrome-starter",
+  "name": "pomodoro-chrome-extension",
   "version": "0.0.1",
-  "description": "Next.js Chrome Extension Starter, Demo Example by ibnzUK. https://github.com/ibnzUK/next-chrome-starter",
+  "description": "Pomodoro chrome extension",
   "main": "index.js",
   "scripts": {
-    "build": "npm run prep",
-    "prep": "npm run exp && node out.js",
-    "exp": "next build && next export",
+    "build": "next build && node out.js",
     "run": "next start",
     "dev": "next dev"
   },

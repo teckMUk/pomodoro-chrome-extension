@@ -82,6 +82,7 @@ This will run prep and export to create new folder 'out/', and rename '\_next' f
 - [x] Add a countdown timer to show the time left
 
 ## Work in Progress
+
 - [ ] Add a notification when the timer is up
 - [ ] Add a sound when the timer is up
 
@@ -95,10 +96,6 @@ This will run prep and export to create new folder 'out/', and rename '\_next' f
 - [ ] Add a dark mode
 - [ ] Add a light mode
 - [ ] Add a theme switcher
-
-```
-
-```
 
 # Contributing
 
